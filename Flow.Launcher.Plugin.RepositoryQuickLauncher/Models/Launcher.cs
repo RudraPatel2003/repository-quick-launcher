@@ -1,43 +1,34 @@
 namespace Flow.Launcher.Plugin.RepositoryQuickLauncher.Models;
 
-public enum LauncherEnumeration
+public enum LauncherType
 {
     VSCode = 0,
     Cursor = 1,
     Invalid = 2,
 }
 
-public static class LauncherExtensions
+public static class LauncherParser
 {
-    public static LauncherEnumeration GetLauncher(string launcher)
+    public static LauncherType GetLauncher(string launcher)
     {
         launcher = launcher.Trim().ToLowerInvariant();
 
-        if (launcher == "code")
+        return launcher switch
         {
-            return LauncherEnumeration.VSCode;
-        }
-
-        if (launcher == "cursor")
-        {
-            return LauncherEnumeration.Cursor;
-        }
-
-        return LauncherEnumeration.Invalid;
+            "code" => LauncherType.VSCode,
+            "cursor" => LauncherType.Cursor,
+            _ => LauncherType.Invalid,
+        };
     }
 
-    public static string GetLauncherCommand(LauncherEnumeration launcher)
+    public static string GetLauncherCommand(LauncherType launcher)
     {
-        if (launcher == LauncherEnumeration.VSCode)
+        return launcher switch
         {
-            return "code";
-        }
-
-        if (launcher == LauncherEnumeration.Cursor)
-        {
-            return "cursor";
-        }
-
-        return "";
+            LauncherType.VSCode => "code",
+            LauncherType.Cursor => "cursor",
+            LauncherType.Invalid => "",
+            _ => "",
+        };
     }
 }

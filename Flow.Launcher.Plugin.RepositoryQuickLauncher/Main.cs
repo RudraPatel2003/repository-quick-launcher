@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Controls;
 using Flow.Launcher.Plugin.RepositoryQuickLauncher.Helpers;
 using Flow.Launcher.Plugin.RepositoryQuickLauncher.Models;
 using Flow.Launcher.Plugin.RepositoryQuickLauncher.UI;
+using FuzzyScore.Net;
 
 namespace Flow.Launcher.Plugin.RepositoryQuickLauncher;
 
@@ -17,7 +19,7 @@ public class RepositoryQuickLauncher : IPlugin, ISettingProvider, IReloadable
     {
         _context = context;
         _settings = _context.API.LoadSettingJsonStorage<Settings>();
-        _repositories = RepositoryFinder.FindRepositories(_settings);
+        _repositories = RepositoryFinder.FindRepositories(_settings, _context);
     }
 
     public List<Result> Query(Query query)
@@ -42,10 +44,10 @@ public class RepositoryQuickLauncher : IPlugin, ISettingProvider, IReloadable
             return Messages.GetEnterCommandMessage();
         }
 
-        LauncherEnumeration launcher = LauncherExtensions.GetLauncher(queryWords[0]);
+        LauncherType launcher = LauncherParser.GetLauncher(queryWords[0]);
         string queryString = string.Join(" ", queryWords[1..]);
 
-        if (launcher == LauncherEnumeration.Invalid)
+        if (launcher == LauncherType.Invalid)
         {
             return Messages.GetInvalidCommandMessage();
         }
@@ -70,18 +72,43 @@ public class RepositoryQuickLauncher : IPlugin, ISettingProvider, IReloadable
         Init(_context);
     }
 
-    private List<Result> GetResults(LauncherEnumeration launcher, string queryString)
+    private List<Result> GetResults(LauncherType launcher, string queryString)
     {
-        List<Result> results = new();
+        queryString = queryString.ToLowerInvariant().Trim();
 
-        Result test = new()
+        if (_settings is null)
         {
-            Title = LauncherExtensions.GetLauncherCommand(launcher) + " " + _repositories[0].Name,
-            SubTitle = queryString,
-            IcoPath = Constants.IconPath,
-        };
+            return new List<Result>();
+        }
 
-        results.Add(test);
+        List<ScoredRepository> scoredRepositories = _repositories
+            .Select(repository => new ScoredRepository(
+                repository,
+                FuzzyScorer.Score(repository.Name, queryString)
+            ))
+            .Where(repository => repository.Score > 0)
+            .OrderByDescending(repository => repository.Score)
+            .ToList();
+
+        if (scoredRepositories.Count == 0)
+        {
+            return Messages.GetNoResultsMessage(_context);
+        }
+
+        List<Result> results = scoredRepositories
+            .Select(scoredRepository => new Result()
+            {
+                Title = scoredRepository.Repository.GetResultTitle(),
+                SubTitle = scoredRepository.Repository.GetResultSubTitle(),
+                Score = scoredRepository.Score,
+                IcoPath = Constants.IconPath,
+                Action = (e) =>
+                {
+                    RepositoryOpener.OpenFolder(launcher, scoredRepository.Repository, _settings);
+                    return true;
+                },
+            })
+            .ToList();
 
         return results;
     }

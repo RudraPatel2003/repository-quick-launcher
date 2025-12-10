@@ -18,7 +18,7 @@ public static class Messages
 
     public static List<Result> GetMissingConfigurationMessage(PluginInitContext? context)
     {
-        Result missingTokenResult = new()
+        Result missingConfigurationResult = new()
         {
             Title = "Missing Configuration",
             SubTitle = "Please provide a Windows or WSL directory in the plugin settings",
@@ -32,19 +32,20 @@ public static class Messages
 
         Result reloadPluginResult = GetReloadPluginResult(context);
 
-        return new List<Result>() { missingTokenResult, reloadPluginResult };
+        return new List<Result>() { missingConfigurationResult, reloadPluginResult };
     }
 
     public static List<Result> GetEnterCommandMessage()
     {
-        Result keepTypingResult = new()
+        Result enterCommandResult = new()
         {
             Title = "Enter command",
-            SubTitle = """Please type "code" or "cursor" to begin searching for repositories""",
+            SubTitle =
+                """Please type "code" or "cursor" and then you search query to begin searching for repositories""",
             IcoPath = Constants.IconPath,
         };
 
-        return new List<Result>() { keepTypingResult };
+        return new List<Result>() { enterCommandResult };
     }
 
     public static List<Result> GetInvalidCommandMessage()
@@ -52,7 +53,8 @@ public static class Messages
         Result invalidCommandResult = new()
         {
             Title = "Invalid command",
-            SubTitle = """Please type "code" or "cursor" to begin searching for repositories""",
+            SubTitle =
+                """Please type "code" or "cursor" and then you search query to begin searching for repositories""",
             IcoPath = Constants.IconPath,
         };
 
