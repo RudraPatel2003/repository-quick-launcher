@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using Flow.Launcher.Plugin.RepositoryQuickLauncher.Models;
 
@@ -5,7 +6,12 @@ namespace Flow.Launcher.Plugin.RepositoryQuickLauncher.Helpers;
 
 public static class RepositoryOpener
 {
-    public static void OpenFolder(LauncherType launcher, Repository repository, Settings settings)
+    public static void OpenFolder(
+        LauncherType launcher,
+        Repository repository,
+        PluginInitContext context,
+        Settings settings
+    )
     {
         string launchCommand = LauncherParser.GetLauncherCommand(launcher);
 
@@ -32,6 +38,13 @@ public static class RepositoryOpener
             WindowStyle = ProcessWindowStyle.Hidden,
         };
 
-        _ = Process.Start(processStartInfo);
+        try
+        {
+            _ = Process.Start(processStartInfo);
+        }
+        catch (Exception ex)
+        {
+            context.API.ShowMsg($"Error opening folder {repository.Name}", ex.Message);
+        }
     }
 }

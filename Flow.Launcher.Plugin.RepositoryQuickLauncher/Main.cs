@@ -76,7 +76,7 @@ public class RepositoryQuickLauncher : IPlugin, ISettingProvider, IReloadable
     {
         queryString = queryString.ToLowerInvariant().Trim();
 
-        if (_settings is null)
+        if (_context is null || _settings is null)
         {
             return new List<Result>();
         }
@@ -104,7 +104,12 @@ public class RepositoryQuickLauncher : IPlugin, ISettingProvider, IReloadable
                 IcoPath = Constants.IconPath,
                 Action = (e) =>
                 {
-                    RepositoryOpener.OpenFolder(launcher, scoredRepository.Repository, _settings);
+                    RepositoryOpener.OpenFolder(
+                        launcher,
+                        scoredRepository.Repository,
+                        _context,
+                        _settings
+                    );
                     return true;
                 },
             })
