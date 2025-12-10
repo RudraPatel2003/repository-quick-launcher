@@ -1,0 +1,53 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net7.0-windows</TargetFramework>
+
+    <!-- Metadata -->
+    <AssemblyName>Flow.Launcher.Plugin.RepositoryQuickLauncher</AssemblyName>
+    <PackageId>Flow.Launcher.Plugin.RepositoryQuickLauncher</PackageId>
+    <Authors>RudraPatel2003</Authors>
+    <PackageProjectUrl>https://github.com/RudraPatel2003/repository-quick-launcher</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/RudraPatel2003/repository-quick-launcher</RepositoryUrl>
+    <PackageTags>flow-launcher flow-plugin</PackageTags>
+
+    <!-- Default Configuration Included In Template -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <!-- Additional Configuration -->
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
+    <CSharpier_Check>true</CSharpier_Check>
+
+    <!-- Needed for SettingsViewModel -->
+    <UseWpf>true</UseWpf>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>None</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="plugin.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+
+    <!-- Ensure icons get copied to output -->
+    <Content Include="Assets\**">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CSharpier.MsBuild" Version="1.2.1">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Flow.Launcher.Plugin" Version="4.4.0" />
+    <PackageReference Include="FuzzyScore.Net" Version="2.0.0" />
+  </ItemGroup>
+</Project>
