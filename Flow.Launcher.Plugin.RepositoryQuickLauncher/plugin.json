@@ -1,12 +1,12 @@
 {
-    "ID": "D0F4498BC725495FBCAB8B5046818671",
-    "ActionKeyword": "repo",
-    "Name": "Repository Quick Launcher",
-    "Description": "A Flow Launcher plugin to quickly open codebases using VS Code or Cursor",
-    "Author": "RudraPatel2003",
-    "Version": "1.0.0",
-    "Language": "csharp",
-    "Website": "https://github.com/RudraPatel2003/Flow.Launcher.Plugin.RepositoryQuickLauncher",
-    "IcoPath": "Assets/icon.png",
-    "ExecuteFileName": "Flow.Launcher.Plugin.RepositoryQuickLauncher.dll"
+  "ID": "D0F4498BC725495FBCAB8B5046818671",
+  "ActionKeyword": "repo",
+  "Name": "Repository Quick Launcher",
+  "Description": "A Flow Launcher plugin to quickly open codebases using VS Code or Cursor",
+  "Author": "RudraPatel2003",
+  "Version": "1.0.0",
+  "Language": "csharp",
+  "Website": "https://github.com/RudraPatel2003/repository-quick-launcher",
+  "IcoPath": "Assets/icon.png",
+  "ExecuteFileName": "Flow.Launcher.Plugin.RepositoryQuickLauncher.dll"
 }
