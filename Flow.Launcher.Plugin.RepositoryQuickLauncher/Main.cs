@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
@@ -31,28 +30,18 @@ public class RepositoryQuickLauncher : IPlugin, ISettingProvider, IReloadable
 
         if (_settings.WindowsDirectories.Count == 0 && _settings.WslDirectories.Count == 0)
         {
-            return Messages.GetMissingConfigurationMessage(_context);
+            return Messages.GetMissingDirectoriesMessage(_context);
         }
 
-        string[] queryWords = query.Search.Split(
-            ' ',
-            StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries
-        );
-
-        if (queryWords.Length is 0 or 1)
+        if (
+            string.IsNullOrWhiteSpace(_settings.WindowsLaunchCommand)
+            || string.IsNullOrWhiteSpace(_settings.WslLaunchCommand)
+        )
         {
-            return Messages.GetEnterCommandMessage();
+            return Messages.GetMissingLaunchCommandsMessage(_context);
         }
 
-        LauncherType launcher = LauncherParser.GetLauncher(queryWords[0]);
-        string queryString = string.Join(" ", queryWords[1..]);
-
-        if (launcher == LauncherType.Invalid)
-        {
-            return Messages.GetInvalidCommandMessage();
-        }
-
-        return GetResults(launcher, queryString);
+        return GetResults(query.Search);
     }
 
     public Control CreateSettingPanel()
@@ -72,13 +61,18 @@ public class RepositoryQuickLauncher : IPlugin, ISettingProvider, IReloadable
         Init(_context);
     }
 
-    private List<Result> GetResults(LauncherType launcher, string queryString)
+    private List<Result> GetResults(string queryString)
     {
         queryString = queryString.ToLowerInvariant().Trim();
 
         if (_context is null || _settings is null)
         {
             return new List<Result>();
+        }
+
+        if (string.IsNullOrWhiteSpace(queryString))
+        {
+            return Messages.GetKeepTypingMessage();
         }
 
         List<ScoredRepository> scoredRepositories = _repositories
@@ -104,12 +98,7 @@ public class RepositoryQuickLauncher : IPlugin, ISettingProvider, IReloadable
                 IcoPath = Constants.IconPath,
                 Action = (e) =>
                 {
-                    RepositoryOpener.OpenFolder(
-                        launcher,
-                        scoredRepository.Repository,
-                        _context,
-                        _settings
-                    );
+                    RepositoryOpener.OpenFolder(scoredRepository.Repository, _context, _settings);
                     return true;
                 },
             })

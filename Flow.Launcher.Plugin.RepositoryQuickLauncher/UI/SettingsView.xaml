@@ -22,25 +22,66 @@
       </Grid.RowDefinitions>
 
       <Grid Grid.Row="0">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto" />
+          <RowDefinition Height="Auto" />
+          <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
           <ColumnDefinition Width="*" SharedSizeGroup="B" />
         </Grid.ColumnDefinitions>
 
         <TextBlock
+          Grid.Row="0"
           Grid.Column="0"
-          Margin="16,6,16,6"
+          Margin="16,6"
           VerticalAlignment="Center"
-          Text="WSL Distribution Name"
-          TextBlock.Foreground="{DynamicResource Color05B}"
+          Text="Windows Launch Command"
+          Foreground="{DynamicResource Color05B}"
         />
 
         <TextBox
+          Grid.Row="0"
+          Grid.Column="1"
+          Width="300"
+          VerticalAlignment="Center"
+          Text="{Binding WindowsLaunchCommand}"
+        />
+
+        <TextBlock
+          Grid.Row="1"
+          Grid.Column="0"
+          Margin="16,6"
+          VerticalAlignment="Center"
+          Text="WSL Distribution Name"
+          Foreground="{DynamicResource Color05B}"
+        />
+
+        <TextBox
+          Grid.Row="1"
           Grid.Column="1"
           Width="300"
           VerticalAlignment="Center"
           Text="{Binding WslDistributionName}"
-          TextWrapping="NoWrap"
+        />
+
+        <TextBlock
+          Grid.Row="2"
+          Grid.Column="0"
+          Margin="16,6"
+          VerticalAlignment="Center"
+          Text="WSL Launch Command"
+          Foreground="{DynamicResource Color05B}"
+        />
+
+        <TextBox
+          Grid.Row="2"
+          Grid.Column="1"
+          Width="300"
+          VerticalAlignment="Center"
+          Text="{Binding WslLaunchCommand}"
         />
       </Grid>
 

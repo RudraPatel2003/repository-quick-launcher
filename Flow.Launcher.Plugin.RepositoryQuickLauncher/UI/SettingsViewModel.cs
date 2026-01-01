@@ -8,8 +8,17 @@ public class SettingsViewModel : BaseModel
 {
     public Settings Settings { get; }
 
+    public string WindowsLaunchCommand
+    {
+        get => Settings.WindowsLaunchCommand;
+        set
+        {
+            Settings.WindowsLaunchCommand = value;
+            OnPropertyChanged();
+        }
+    }
+
     public ObservableCollection<string> WindowsDirectoriesCollection { get; }
-    public ObservableCollection<string> WslDirectoriesCollection { get; }
 
     public string WslDistributionName
     {
@@ -20,6 +29,18 @@ public class SettingsViewModel : BaseModel
             OnPropertyChanged();
         }
     }
+
+    public string WslLaunchCommand
+    {
+        get => Settings.WslLaunchCommand;
+        set
+        {
+            Settings.WslLaunchCommand = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public ObservableCollection<string> WslDirectoriesCollection { get; }
 
     public SettingsViewModel(Settings settings)
     {
