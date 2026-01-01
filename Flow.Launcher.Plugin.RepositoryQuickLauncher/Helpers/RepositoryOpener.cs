@@ -7,24 +7,18 @@ namespace Flow.Launcher.Plugin.RepositoryQuickLauncher.Helpers;
 public static class RepositoryOpener
 {
     public static void OpenFolder(
-        LauncherType launcher,
         Repository repository,
         PluginInitContext context,
         Settings settings
     )
     {
-        string launchCommand = LauncherParser.GetLauncherCommand(launcher);
-
-        if (string.IsNullOrWhiteSpace(launchCommand))
-        {
-            return;
-        }
-
+        string launchCommand = settings.WindowsLaunchCommand;
         string command = $"{launchCommand} {repository.Path}";
 
         if (repository.IsWsl)
         {
             string wslDistribution = settings.WslDistributionName;
+            launchCommand = settings.WslLaunchCommand;
 
             command =
                 $"wsl --distribution {wslDistribution} --cd {repository.Directory} {launchCommand} {repository.Name}";

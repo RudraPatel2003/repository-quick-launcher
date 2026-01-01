@@ -16,9 +16,9 @@ public static class Messages
         return new List<Result>() { loadingResult };
     }
 
-    public static List<Result> GetMissingConfigurationMessage(PluginInitContext? context)
+    public static List<Result> GetMissingDirectoriesMessage(PluginInitContext? context)
     {
-        Result missingConfigurationResult = new()
+        Result missingDirectoriesResult = new()
         {
             Title = "Missing Configuration",
             SubTitle = "Please provide a Windows or WSL directory in the plugin settings",
@@ -32,33 +32,38 @@ public static class Messages
 
         Result reloadPluginResult = GetReloadPluginResult(context);
 
-        return new List<Result>() { missingConfigurationResult, reloadPluginResult };
+        return new List<Result>() { missingDirectoriesResult, reloadPluginResult };
     }
 
-    public static List<Result> GetEnterCommandMessage()
+    public static List<Result> GetMissingLaunchCommandsMessage(PluginInitContext? context)
     {
-        Result enterCommandResult = new()
+        Result missingLaunchCommandsResult = new()
         {
-            Title = "Enter command",
-            SubTitle =
-                """Please type "code" or "cursor" and then you search query to begin searching for repositories""",
+            Title = "Missing Launch Commands",
+            SubTitle = "Please provide a Windows or WSL launch command in the plugin settings",
+            IcoPath = Constants.IconPath,
+            Action = (e) =>
+            {
+                context?.API.OpenSettingDialog();
+                return true;
+            },
+        };
+
+        Result reloadPluginResult = GetReloadPluginResult(context);
+
+        return new List<Result>() { missingLaunchCommandsResult, reloadPluginResult };
+    }
+
+    public static List<Result> GetKeepTypingMessage()
+    {
+        Result keepTypingResult = new()
+        {
+            Title = "Keep typing",
+            SubTitle = "Please keep typing to search for a repository",
             IcoPath = Constants.IconPath,
         };
 
-        return new List<Result>() { enterCommandResult };
-    }
-
-    public static List<Result> GetInvalidCommandMessage()
-    {
-        Result invalidCommandResult = new()
-        {
-            Title = "Invalid command",
-            SubTitle =
-                """Please type "code" or "cursor" and then you search query to begin searching for repositories""",
-            IcoPath = Constants.IconPath,
-        };
-
-        return new List<Result>() { invalidCommandResult };
+        return new List<Result>() { keepTypingResult };
     }
 
     public static List<Result> GetNoResultsMessage(PluginInitContext? context)
@@ -82,6 +87,7 @@ public static class Messages
             Title = "Reload plugin",
             SubTitle = "Reload plugin",
             IcoPath = Constants.IconPath,
+            Score = -1,
             Action = (e) =>
             {
                 _ = context?.API.ReloadAllPluginData();
