@@ -70,17 +70,21 @@ public class RepositoryQuickLauncher : IPlugin, ISettingProvider, IReloadable
             return new List<Result>();
         }
 
-        if (string.IsNullOrWhiteSpace(queryString))
-        {
-            return Messages.GetKeepTypingMessage();
-        }
-
-        List<ScoredRepository> scoredRepositories = _repositories
-            .Select(repository => new ScoredRepository(
+        IEnumerable<ScoredRepository> scoredRepositoriesQuery = _repositories.Select(
+            repository => new ScoredRepository(
                 repository,
                 FuzzyScorer.Score(repository.Name, queryString)
-            ))
-            .Where(repository => repository.Score > 0)
+            )
+        );
+
+        if (!string.IsNullOrWhiteSpace(queryString))
+        {
+            scoredRepositoriesQuery = scoredRepositoriesQuery.Where(repository =>
+                repository.Score > 0
+            );
+        }
+
+        List<ScoredRepository> scoredRepositories = scoredRepositoriesQuery
             .OrderByDescending(repository => repository.Score)
             .ToList();
 
