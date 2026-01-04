@@ -12,25 +12,60 @@ public static class RepositoryOpener
         Settings settings
     )
     {
-        string launchCommand = settings.WindowsLaunchCommand;
-        string command = $"{launchCommand} {repository.Path}";
-
         if (repository.IsWsl)
         {
-            string wslDistribution = settings.WslDistributionName;
-            launchCommand = settings.WslLaunchCommand;
-
-            command =
-                $"wsl --distribution {wslDistribution} --cd {repository.Directory} {launchCommand} {repository.Name}";
+            OpenWslFolder(repository, context, settings);
         }
+        else
+        {
+            OpenWindowsFolder(repository, context, settings);
+        }
+    }
 
+    private static void OpenWslFolder(
+        Repository repository,
+        PluginInitContext context,
+        Settings settings
+    )
+    {
         ProcessStartInfo processStartInfo = new()
         {
-            FileName = "cmd.exe",
-            Arguments = $"/c \"{command}\"",
+            FileName = "wsl.exe",
             UseShellExecute = true,
             WindowStyle = ProcessWindowStyle.Hidden,
         };
+
+        processStartInfo.ArgumentList.Add("--distribution");
+        processStartInfo.ArgumentList.Add(settings.WslDistributionName);
+
+        processStartInfo.ArgumentList.Add(settings.WslLaunchCommand);
+
+        processStartInfo.ArgumentList.Add($"'{repository.WslPath}'");
+
+        try
+        {
+            _ = Process.Start(processStartInfo);
+        }
+        catch (Exception ex)
+        {
+            context.API.ShowMsg($"Error opening folder {repository.Name}", ex.Message);
+        }
+    }
+
+    private static void OpenWindowsFolder(
+        Repository repository,
+        PluginInitContext context,
+        Settings settings
+    )
+    {
+        ProcessStartInfo processStartInfo = new()
+        {
+            FileName = settings.WindowsLaunchCommand,
+            UseShellExecute = true,
+            WindowStyle = ProcessWindowStyle.Hidden,
+        };
+
+        processStartInfo.ArgumentList.Add(repository.Path);
 
         try
         {

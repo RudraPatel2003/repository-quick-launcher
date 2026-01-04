@@ -7,7 +7,7 @@
 
 ## Description
 
-A plugin for the [Flow launcher](https://github.com/Flow-Launcher/Flow.Launcher) that allows you to quickly open codebases using your IDE of choice (VSCode, Cursor, Zed, etc.).
+A plugin for the [Flow launcher](https://github.com/Flow-Launcher/Flow.Launcher) that allows you to quickly open codebases using your IDE of choice (VS Code, Cursor, Zed, etc.).
 
 ## Usage
 
