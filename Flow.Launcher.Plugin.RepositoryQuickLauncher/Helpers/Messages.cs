@@ -22,6 +22,7 @@ public static class Messages
         {
             Title = "Missing Configuration",
             SubTitle = "Please provide a Windows or WSL directory in the plugin settings",
+            Score = 100,
             IcoPath = Constants.IconPath,
             Action = (e) =>
             {
@@ -41,6 +42,7 @@ public static class Messages
         {
             Title = "Missing Launch Commands",
             SubTitle = "Please provide a Windows or WSL launch command in the plugin settings",
+            Score = 100,
             IcoPath = Constants.IconPath,
             Action = (e) =>
             {
@@ -54,24 +56,13 @@ public static class Messages
         return new List<Result>() { missingLaunchCommandsResult, reloadPluginResult };
     }
 
-    public static List<Result> GetKeepTypingMessage()
-    {
-        Result keepTypingResult = new()
-        {
-            Title = "Keep typing",
-            SubTitle = "Please keep typing to search for a repository",
-            IcoPath = Constants.IconPath,
-        };
-
-        return new List<Result>() { keepTypingResult };
-    }
-
     public static List<Result> GetNoResultsMessage(PluginInitContext? context)
     {
         Result noResultsResult = new()
         {
             Title = "No results",
             SubTitle = "No results found",
+            Score = 100,
             IcoPath = Constants.IconPath,
         };
 
@@ -87,7 +78,7 @@ public static class Messages
             Title = "Reload plugin",
             SubTitle = "Reload plugin",
             IcoPath = Constants.IconPath,
-            Score = -1,
+            Score = 1,
             Action = (e) =>
             {
                 _ = context?.API.ReloadAllPluginData();
