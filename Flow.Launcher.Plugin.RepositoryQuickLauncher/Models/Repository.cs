@@ -1,3 +1,5 @@
+using System;
+
 namespace Flow.Launcher.Plugin.RepositoryQuickLauncher.Models;
 
 public class Repository
@@ -8,7 +10,12 @@ public class Repository
     public string Path { get; set; }
 
     /// <summary>
-    /// User supplied directory, such as <c>/home/wsl/git</c>
+    /// WSL path, such as <c>/git/repository-quick-launcher</c>
+    /// </summary>
+    public string WslPath { get; set; }
+
+    /// <summary>
+    /// User supplied directory, such as <c>/git</c>
     /// </summary>
     public string Directory { get; set; }
 
@@ -27,6 +34,7 @@ public class Repository
         Path = path;
         Directory = directory;
         Name = GetRepositoryNameFromPath(path);
+        WslPath = GetWslPath(directory, Name);
         IsWsl = Directory.StartsWith('/');
     }
 
@@ -40,6 +48,13 @@ public class Repository
         );
 
         return directoryName;
+    }
+
+    private static string GetWslPath(string directory, string name)
+    {
+        bool needsTrailingSlash = !directory.EndsWith("/", StringComparison.Ordinal);
+
+        return directory + (needsTrailingSlash ? "/" : "") + name;
     }
 
     public string GetResultTitle()
@@ -56,7 +71,7 @@ public class Repository
     {
         if (IsWsl)
         {
-            return $"{Directory}/{Name}";
+            return WslPath;
         }
 
         return Path;
