@@ -11,158 +11,171 @@
   d:DesignWidth="450"
   mc:Ignorable="d"
 >
-  <Border CornerRadius="0,0,9,9" Style="{DynamicResource SettingGroupBox}">
-    <Grid Margin="0,10,0,10">
+  <Grid Margin="{StaticResource SettingPanelMargin}">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <Grid Grid.Row="0">
       <Grid.RowDefinitions>
         <RowDefinition Height="Auto" />
-        <RowDefinition Height="20" />
-        <RowDefinition Height="*" />
-        <RowDefinition Height="20" />
-        <RowDefinition Height="*" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
       </Grid.RowDefinitions>
 
-      <Grid Grid.Row="0">
-        <Grid.RowDefinitions>
-          <RowDefinition Height="Auto" />
-          <RowDefinition Height="Auto" />
-          <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
+        <ColumnDefinition Width="*" SharedSizeGroup="B" />
+      </Grid.ColumnDefinitions>
 
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
-          <ColumnDefinition Width="*" SharedSizeGroup="B" />
-        </Grid.ColumnDefinitions>
+      <TextBlock
+        Grid.Row="0"
+        Grid.Column="0"
+        Margin="{StaticResource SettingPanelItemRightTopBottomMargin}"
+        VerticalAlignment="Center"
+        Foreground="{DynamicResource Color05B}"
+        Text="Windows Launch Command"
+      />
 
-        <TextBlock
-          Grid.Row="0"
-          Grid.Column="0"
-          Margin="16,6"
-          VerticalAlignment="Center"
-          Text="Windows Launch Command"
-          Foreground="{DynamicResource Color05B}"
-        />
+      <TextBox
+        Grid.Row="0"
+        Grid.Column="1"
+        Margin="{StaticResource SettingPanelItemTopBottomMargin}"
+        VerticalAlignment="Center"
+        Text="{Binding WindowsLaunchCommand}"
+      />
 
-        <TextBox
-          Grid.Row="0"
-          Grid.Column="1"
-          Width="300"
-          VerticalAlignment="Center"
-          Text="{Binding WindowsLaunchCommand}"
-        />
+      <TextBlock
+        Grid.Row="1"
+        Grid.Column="0"
+        Margin="{StaticResource SettingPanelItemRightTopBottomMargin}"
+        VerticalAlignment="Center"
+        Foreground="{DynamicResource Color05B}"
+        Text="WSL Distribution Name"
+      />
 
-        <TextBlock
-          Grid.Row="1"
-          Grid.Column="0"
-          Margin="16,6"
-          VerticalAlignment="Center"
-          Text="WSL Distribution Name"
-          Foreground="{DynamicResource Color05B}"
-        />
+      <TextBox
+        Grid.Row="1"
+        Grid.Column="1"
+        Margin="{StaticResource SettingPanelItemTopBottomMargin}"
+        VerticalAlignment="Center"
+        Text="{Binding WslDistributionName}"
+      />
 
-        <TextBox
-          Grid.Row="1"
-          Grid.Column="1"
-          Width="300"
-          VerticalAlignment="Center"
-          Text="{Binding WslDistributionName}"
-        />
+      <TextBlock
+        Grid.Row="2"
+        Grid.Column="0"
+        Margin="{StaticResource SettingPanelItemRightTopBottomMargin}"
+        VerticalAlignment="Center"
+        Foreground="{DynamicResource Color05B}"
+        Text="WSL Launch Command"
+      />
 
-        <TextBlock
-          Grid.Row="2"
-          Grid.Column="0"
-          Margin="16,6"
-          VerticalAlignment="Center"
-          Text="WSL Launch Command"
-          Foreground="{DynamicResource Color05B}"
-        />
-
-        <TextBox
-          Grid.Row="2"
-          Grid.Column="1"
-          Width="300"
-          VerticalAlignment="Center"
-          Text="{Binding WslLaunchCommand}"
-        />
-      </Grid>
-
-      <Grid Grid.Row="2">
-        <Grid.RowDefinitions>
-          <RowDefinition Height="*" />
-          <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-
-        <ListView
-          x:Name="WindowsDirectoriesList"
-          Grid.Row="0"
-          Margin="16,0,16,10"
-          BorderBrush="DarkGray"
-          BorderThickness="1"
-          ItemsSource="{Binding WindowsDirectoriesCollection}"
-          SelectionMode="Extended"
-        >
-          <ListView.View>
-            <GridView>
-              <GridViewColumn Header="Windows Directories" Width="Auto" />
-            </GridView>
-          </ListView.View>
-        </ListView>
-
-        <DockPanel Grid.Row="1" Margin="14,0,14,10">
-          <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
-            <Button
-              MinWidth="100"
-              Margin="10"
-              Click="WindowsDirectoriesButtonAddClick"
-              Content="Add"
-            />
-            <Button
-              MinWidth="100"
-              Margin="10,10,0,10"
-              Click="WindowsDirectoriesButtonDeleteClick"
-              Content="Delete"
-            />
-          </StackPanel>
-
-          <TextBox x:Name="WindowsDirectoriesInput" Margin="0,10,10,10" />
-        </DockPanel>
-      </Grid>
-
-      <Grid Grid.Row="4">
-        <Grid.RowDefinitions>
-          <RowDefinition Height="*" />
-          <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-
-        <ListView
-          x:Name="WslDirectoriesList"
-          Grid.Row="0"
-          Margin="16,0,16,10"
-          BorderBrush="DarkGray"
-          BorderThickness="1"
-          ItemsSource="{Binding WslDirectoriesCollection}"
-          SelectionMode="Extended"
-        >
-          <ListView.View>
-            <GridView>
-              <GridViewColumn Header="WSL Directories" Width="Auto" />
-            </GridView>
-          </ListView.View>
-        </ListView>
-
-        <DockPanel Grid.Row="1" Margin="14,0,14,10">
-          <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
-            <Button MinWidth="100" Margin="10" Click="WslDirectoriesButtonAddClick" Content="Add" />
-            <Button
-              MinWidth="100"
-              Margin="10,10,0,10"
-              Click="WslDirectoriesButtonDeleteClick"
-              Content="Delete"
-            />
-          </StackPanel>
-
-          <TextBox x:Name="WslDirectoriesInput" Margin="0,10,10,10" />
-        </DockPanel>
-      </Grid>
+      <TextBox
+        Grid.Row="2"
+        Grid.Column="1"
+        Margin="{StaticResource SettingPanelItemTopBottomMargin}"
+        VerticalAlignment="Center"
+        Text="{Binding WslLaunchCommand}"
+      />
     </Grid>
-  </Border>
+
+    <Separator Grid.Row="1" Style="{StaticResource SettingPanelSeparatorStyle}" />
+
+    <Grid Grid.Row="2">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="*" />
+        <RowDefinition Height="Auto" />
+      </Grid.RowDefinitions>
+
+      <ListView
+        x:Name="WindowsDirectoriesList"
+        Grid.Row="0"
+        Margin="{StaticResource SettingPanelItemTopBottomMargin}"
+        BorderBrush="DarkGray"
+        BorderThickness="1"
+        ItemsSource="{Binding WindowsDirectoriesCollection}"
+        SelectionMode="Extended"
+      >
+        <ListView.View>
+          <GridView>
+            <GridViewColumn Width="Auto" Header="Windows Directories" />
+          </GridView>
+        </ListView.View>
+      </ListView>
+
+      <DockPanel Grid.Row="1">
+        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+          <Button
+            MinWidth="100"
+            Margin="{StaticResource SettingPanelItemRightTopBottomMargin}"
+            Click="WindowsDirectoriesButtonAddClick"
+            Content="Add"
+          />
+          <Button
+            MinWidth="100"
+            Margin="{StaticResource SettingPanelItemTopBottomMargin}"
+            Click="WindowsDirectoriesButtonDeleteClick"
+            Content="Delete"
+          />
+        </StackPanel>
+
+        <TextBox
+          x:Name="WindowsDirectoriesInput"
+          Margin="{StaticResource SettingPanelItemRightTopBottomMargin}"
+        />
+      </DockPanel>
+    </Grid>
+
+    <Separator Grid.Row="3" Style="{StaticResource SettingPanelSeparatorStyle}" />
+
+    <Grid Grid.Row="4">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="*" />
+        <RowDefinition Height="Auto" />
+      </Grid.RowDefinitions>
+
+      <ListView
+        x:Name="WslDirectoriesList"
+        Grid.Row="0"
+        Margin="{StaticResource SettingPanelItemTopBottomMargin}"
+        BorderBrush="DarkGray"
+        BorderThickness="1"
+        ItemsSource="{Binding WslDirectoriesCollection}"
+        SelectionMode="Extended"
+      >
+        <ListView.View>
+          <GridView>
+            <GridViewColumn Width="Auto" Header="WSL Directories" />
+          </GridView>
+        </ListView.View>
+      </ListView>
+
+      <DockPanel Grid.Row="1">
+        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+          <Button
+            MinWidth="100"
+            Margin="{StaticResource SettingPanelItemRightTopBottomMargin}"
+            Click="WslDirectoriesButtonAddClick"
+            Content="Add"
+          />
+          <Button
+            MinWidth="100"
+            Margin="{StaticResource SettingPanelItemTopBottomMargin}"
+            Click="WslDirectoriesButtonDeleteClick"
+            Content="Delete"
+          />
+        </StackPanel>
+
+        <TextBox
+          x:Name="WslDirectoriesInput"
+          Margin="{StaticResource SettingPanelItemRightTopBottomMargin}"
+        />
+      </DockPanel>
+    </Grid>
+  </Grid>
 </UserControl>
