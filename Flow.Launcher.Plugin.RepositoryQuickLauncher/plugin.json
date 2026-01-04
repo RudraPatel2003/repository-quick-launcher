@@ -4,7 +4,7 @@
   "Name": "Repository Quick Launcher",
   "Description": "A Flow Launcher plugin to quickly open codebases using your IDE of choice (VS Code, Cursor, Zed, etc.)",
   "Author": "RudraPatel2003",
-  "Version": "1.0.1",
+  "Version": "1.0.0",
   "Language": "csharp",
   "Website": "https://github.com/RudraPatel2003/repository-quick-launcher",
   "IcoPath": "Assets/icon.png",
