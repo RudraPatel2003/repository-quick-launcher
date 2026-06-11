@@ -24,7 +24,7 @@ public class RepositoryQuickLauncher : IPlugin, ISettingProvider, IReloadable, I
             _context.API.SaveSettingJsonStorage<Settings>();
         }
 
-        _repositories = RepositoryFinder.FindRepositories(_settings, _context);
+        LoadRepositories();
     }
 
     public List<Result> Query(Query query)
@@ -62,12 +62,17 @@ public class RepositoryQuickLauncher : IPlugin, ISettingProvider, IReloadable, I
 
     public void ReloadData()
     {
-        if (_context is null)
+        LoadRepositories();
+    }
+
+    private void LoadRepositories()
+    {
+        if (_context is null || _settings is null)
         {
             return;
         }
 
-        Init(_context);
+        _repositories = RepositoryFinder.FindRepositories(_settings, _context);
     }
 
     public List<Result> LoadContextMenus(Result selectedResult)
