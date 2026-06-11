@@ -43,6 +43,7 @@ public static class RepositoryOpener
         };
 
         processStartInfo.ArgumentList.Add("--distribution");
+
         processStartInfo.ArgumentList.Add(command.WslDistributionName);
 
         processStartInfo.ArgumentList.Add(command.WslLaunchCommand);

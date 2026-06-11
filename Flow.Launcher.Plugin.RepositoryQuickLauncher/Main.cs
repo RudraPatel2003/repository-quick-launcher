@@ -11,7 +11,9 @@ namespace Flow.Launcher.Plugin.RepositoryQuickLauncher;
 public class RepositoryQuickLauncher : IPlugin, ISettingProvider, IReloadable, IContextMenu
 {
     private PluginInitContext? _context;
+
     private Settings? _settings;
+
     private List<Repository> _repositories = new();
 
     public void Init(PluginInitContext context)
