@@ -10,39 +10,15 @@ public class CommandSetting : IEquatable<CommandSetting>
 
     public string WindowsLaunchCommand { get; set; } = Constants.CodeCommand;
 
-    public string WslDistributionName { get; set; } = "Ubuntu";
+    public string WslDistributionName { get; set; } = Constants.DefaultWslDistribution;
 
     public string WslLaunchCommand { get; set; } = Constants.CodeCommand;
 
     public bool IsDefault { get; set; }
 
-    public static CommandSetting CreateDefault()
-    {
-        return new CommandSetting
-        {
-            Name = "VS Code",
-            WindowsLaunchCommand = Constants.CodeCommand,
-            WslDistributionName = "Ubuntu",
-            WslLaunchCommand = Constants.CodeCommand,
-            IsDefault = true,
-        };
-    }
-
-    public static CommandSetting CreateExplorer()
-    {
-        return new CommandSetting
-        {
-            Name = "Explorer",
-            WindowsLaunchCommand = Constants.ExplorerCommand,
-            WslDistributionName = "Ubuntu",
-            WslLaunchCommand = Constants.ExplorerExecutable,
-            IsDefault = false,
-        };
-    }
-
     public static List<CommandSetting> CreateInitialCommandSettings()
     {
-        return new List<CommandSetting> { CreateDefault(), CreateExplorer() };
+        return new List<CommandSetting> { CreateVscodeCommand(), CreateFileExplorerCommand() };
     }
 
     public bool Equals(CommandSetting? other)
@@ -52,23 +28,33 @@ public class CommandSetting : IEquatable<CommandSetting>
             return false;
         }
 
-        return string.Equals(Name.Trim(), other.Name.Trim(), StringComparison.Ordinal)
-            && string.Equals(
-                WindowsLaunchCommand.Trim(),
-                other.WindowsLaunchCommand.Trim(),
-                StringComparison.Ordinal
-            )
-            && string.Equals(
-                WslDistributionName.Trim(),
-                other.WslDistributionName.Trim(),
-                StringComparison.Ordinal
-            )
-            && string.Equals(
-                WslLaunchCommand.Trim(),
-                other.WslLaunchCommand.Trim(),
-                StringComparison.Ordinal
-            )
-            && IsDefault == other.IsDefault;
+        bool isNameEqual = string.Equals(Name.Trim(), other.Name.Trim(), StringComparison.Ordinal);
+
+        bool isWindowsLaunchCommandEqual = string.Equals(
+            WindowsLaunchCommand.Trim(),
+            other.WindowsLaunchCommand.Trim(),
+            StringComparison.Ordinal
+        );
+
+        bool isWslDistributionNameEqual = string.Equals(
+            WslDistributionName.Trim(),
+            other.WslDistributionName.Trim(),
+            StringComparison.Ordinal
+        );
+
+        bool isWslLaunchCommandEqual = string.Equals(
+            WslLaunchCommand.Trim(),
+            other.WslLaunchCommand.Trim(),
+            StringComparison.Ordinal
+        );
+
+        bool isDefaultEqual = IsDefault == other.IsDefault;
+
+        return isNameEqual
+            && isWindowsLaunchCommandEqual
+            && isWslDistributionNameEqual
+            && isWslLaunchCommandEqual
+            && isDefaultEqual;
     }
 
     public override bool Equals(object? obj)
@@ -85,5 +71,29 @@ public class CommandSetting : IEquatable<CommandSetting>
             WslLaunchCommand.Trim(),
             IsDefault
         );
+    }
+
+    private static CommandSetting CreateVscodeCommand()
+    {
+        return new CommandSetting
+        {
+            Name = "VS Code",
+            WindowsLaunchCommand = Constants.CodeCommand,
+            WslDistributionName = Constants.DefaultWslDistribution,
+            WslLaunchCommand = Constants.CodeCommand,
+            IsDefault = true,
+        };
+    }
+
+    private static CommandSetting CreateFileExplorerCommand()
+    {
+        return new CommandSetting
+        {
+            Name = "File Explorer",
+            WindowsLaunchCommand = Constants.ExplorerCommand,
+            WslDistributionName = Constants.DefaultWslDistribution,
+            WslLaunchCommand = Constants.ExplorerExecutable,
+            IsDefault = false,
+        };
     }
 }

@@ -59,6 +59,7 @@ public class RepositoryFinder
         }
 
         string wslDistributionName = defaultCommand.WslDistributionName;
+
         string partialWslPath = Constants.WslPrefix + wslDistributionName;
 
         List<string> wslDirectories = settings.WslDirectories;
