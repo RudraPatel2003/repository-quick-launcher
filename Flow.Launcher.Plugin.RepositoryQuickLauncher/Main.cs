@@ -65,16 +65,6 @@ public class RepositoryQuickLauncher : IPlugin, ISettingProvider, IReloadable, I
         LoadRepositories();
     }
 
-    private void LoadRepositories()
-    {
-        if (_context is null || _settings is null)
-        {
-            return;
-        }
-
-        _repositories = RepositoryFinder.FindRepositories(_settings, _context);
-    }
-
     public List<Result> LoadContextMenus(Result selectedResult)
     {
         if (_context is null || _settings is null)
@@ -102,6 +92,16 @@ public class RepositoryQuickLauncher : IPlugin, ISettingProvider, IReloadable, I
                 },
             })
             .ToList();
+    }
+
+    private void LoadRepositories()
+    {
+        if (_context is null || _settings is null)
+        {
+            return;
+        }
+
+        _repositories = RepositoryFinder.FindRepositories(_settings, _context);
     }
 
     private List<Result> GetResults(string queryString, CommandSetting defaultCommand)
