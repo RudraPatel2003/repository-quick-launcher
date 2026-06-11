@@ -12,9 +12,10 @@ public static class RepositoryOpener
         CommandSetting command
     )
     {
-        if (ExplorerOpener.ShouldOpenInExplorer(repository, command))
+        if (FileExplorerHelper.ShouldOpenInFileExplorer(repository, command))
         {
-            ExplorerOpener.OpenFolder(repository, context);
+            FileExplorerHelper.OpenFolderInFileExplorer(repository, context);
+
             return;
         }
 
