@@ -10,17 +10,17 @@ public partial class CommandSettingsView : UserControl
 {
     private readonly PluginInitContext _context;
     private readonly CommandSettingsViewModel _viewModel;
-    private readonly Action _onSaved;
+    private readonly Action _reloadData;
 
     public CommandSettingsView(
         PluginInitContext context,
         CommandSettingsViewModel viewModel,
-        Action onSaved
+        Action reloadData
     )
     {
         _context = context;
         _viewModel = viewModel;
-        _onSaved = onSaved;
+        _reloadData = reloadData;
 
         DataContext = viewModel;
 
@@ -55,8 +55,10 @@ public partial class CommandSettingsView : UserControl
         }
 
         _viewModel.SyncToSettings();
+
         _context.API.SaveSettingJsonStorage<Settings>();
-        _onSaved();
+
+        _reloadData();
     }
 
     private void IsDefaultCheckBoxChanged(object sender, RoutedEventArgs e)

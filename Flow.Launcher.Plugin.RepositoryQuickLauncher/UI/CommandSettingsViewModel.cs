@@ -33,46 +33,6 @@ public class CommandSettingsViewModel : BaseModel
         CommandSettings.CollectionChanged += OnCommandSettingsCollectionChanged;
     }
 
-    private void OnCommandSettingsCollectionChanged(
-        object? sender,
-        NotifyCollectionChangedEventArgs e
-    )
-    {
-        OnPropertyChanged(nameof(CanDelete));
-        OnPropertyChanged(nameof(CanSave));
-
-        if (e.NewItems is not null)
-        {
-            foreach (CommandSettingRowViewModel row in e.NewItems)
-            {
-                SubscribeToRow(row);
-            }
-        }
-
-        if (e.OldItems is not null)
-        {
-            foreach (CommandSettingRowViewModel row in e.OldItems)
-            {
-                UnsubscribeFromRow(row);
-            }
-        }
-    }
-
-    private void SubscribeToRow(CommandSettingRowViewModel row)
-    {
-        row.PropertyChanged += OnRowPropertyChanged;
-    }
-
-    private void UnsubscribeFromRow(CommandSettingRowViewModel row)
-    {
-        row.PropertyChanged -= OnRowPropertyChanged;
-    }
-
-    private void OnRowPropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        OnPropertyChanged(nameof(CanSave));
-    }
-
     public void AddRow()
     {
         CommandSettings.Add(
@@ -80,7 +40,7 @@ public class CommandSettingsViewModel : BaseModel
             {
                 Name = "New Command",
                 WindowsLaunchCommand = Constants.CodeCommand,
-                WslDistributionName = "Ubuntu",
+                WslDistributionName = Constants.DefaultWslDistribution,
                 WslLaunchCommand = Constants.CodeCommand,
                 IsDefault = CommandSettings.Count == 0,
             }
@@ -129,6 +89,31 @@ public class CommandSettingsViewModel : BaseModel
         }
     }
 
+    private void OnCommandSettingsCollectionChanged(
+        object? sender,
+        NotifyCollectionChangedEventArgs e
+    )
+    {
+        OnPropertyChanged(nameof(CanDelete));
+        OnPropertyChanged(nameof(CanSave));
+
+        if (e.NewItems is not null)
+        {
+            foreach (CommandSettingRowViewModel row in e.NewItems)
+            {
+                SubscribeToRow(row);
+            }
+        }
+
+        if (e.OldItems is not null)
+        {
+            foreach (CommandSettingRowViewModel row in e.OldItems)
+            {
+                UnsubscribeFromRow(row);
+            }
+        }
+    }
+
     public string? Validate()
     {
         if (CommandSettings.Count == 0)
@@ -172,6 +157,22 @@ public class CommandSettingsViewModel : BaseModel
     public void SyncToSettings()
     {
         Settings.CommandSettings = CommandSettings.Select(row => row.ToModel()).ToList();
+
+        OnPropertyChanged(nameof(CanSave));
+    }
+
+    private void SubscribeToRow(CommandSettingRowViewModel row)
+    {
+        row.PropertyChanged += OnRowPropertyChanged;
+    }
+
+    private void UnsubscribeFromRow(CommandSettingRowViewModel row)
+    {
+        row.PropertyChanged -= OnRowPropertyChanged;
+    }
+
+    private void OnRowPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
         OnPropertyChanged(nameof(CanSave));
     }
 

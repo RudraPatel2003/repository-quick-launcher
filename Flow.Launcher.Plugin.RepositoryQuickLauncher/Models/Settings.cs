@@ -26,10 +26,11 @@ public class Settings
                 CommandSettings[0].IsDefault = true;
             }
 
-            return false;
+            return true;
         }
 
         CommandSettings.AddRange(CommandSetting.CreateInitialCommandSettings());
+
         return true;
     }
 }

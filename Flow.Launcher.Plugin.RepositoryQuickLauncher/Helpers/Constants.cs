@@ -6,6 +6,8 @@ public static class Constants
 
     public const string WslPrefix = @"\\wsl$\";
 
+    public const string DefaultWslDistribution = "Ubuntu";
+
     public const string CodeCommand = "code";
 
     public const string ExplorerCommand = "explorer";

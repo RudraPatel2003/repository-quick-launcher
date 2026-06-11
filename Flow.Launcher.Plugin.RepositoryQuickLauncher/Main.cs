@@ -55,7 +55,7 @@ public class RepositoryQuickLauncher : IPlugin, ISettingProvider, IReloadable, I
 
     public Control CreateSettingPanel()
     {
-        SettingsViewModel settingsViewModel = new(_settings ?? new Settings());
+        SettingsViewModel settingsViewModel = new(_settings!);
 
         return new SettingsView(_context!, settingsViewModel, ReloadData);
     }

@@ -5,9 +5,13 @@ namespace Flow.Launcher.Plugin.RepositoryQuickLauncher.UI;
 public class CommandSettingRowViewModel : BaseModel
 {
     private string _name = string.Empty;
+
     private string _windowsLaunchCommand = string.Empty;
+
     private string _wslDistributionName = string.Empty;
+
     private string _wslLaunchCommand = string.Empty;
+
     private bool _isDefault;
 
     public string Name
