@@ -41,7 +41,8 @@ public static class Messages
         Result missingLaunchCommandsResult = new()
         {
             Title = "Missing Launch Commands",
-            SubTitle = "Please provide a Windows or WSL launch command in the plugin settings",
+            SubTitle =
+                "Please configure at least one command in the command settings table in plugin settings",
             Score = 100,
             IcoPath = Constants.IconPath,
             Action = (e) =>

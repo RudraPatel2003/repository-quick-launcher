@@ -20,69 +20,7 @@
       <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
 
-    <Grid Grid.Row="0">
-      <Grid.RowDefinitions>
-        <RowDefinition Height="Auto" />
-        <RowDefinition Height="Auto" />
-        <RowDefinition Height="Auto" />
-      </Grid.RowDefinitions>
-
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
-        <ColumnDefinition Width="*" SharedSizeGroup="B" />
-      </Grid.ColumnDefinitions>
-
-      <TextBlock
-        Grid.Row="0"
-        Grid.Column="0"
-        Margin="{StaticResource SettingPanelItemRightTopBottomMargin}"
-        VerticalAlignment="Center"
-        Foreground="{DynamicResource Color05B}"
-        Text="Windows Launch Command"
-      />
-
-      <TextBox
-        Grid.Row="0"
-        Grid.Column="1"
-        Margin="{StaticResource SettingPanelItemTopBottomMargin}"
-        VerticalAlignment="Center"
-        Text="{Binding WindowsLaunchCommand}"
-      />
-
-      <TextBlock
-        Grid.Row="1"
-        Grid.Column="0"
-        Margin="{StaticResource SettingPanelItemRightTopBottomMargin}"
-        VerticalAlignment="Center"
-        Foreground="{DynamicResource Color05B}"
-        Text="WSL Distribution Name"
-      />
-
-      <TextBox
-        Grid.Row="1"
-        Grid.Column="1"
-        Margin="{StaticResource SettingPanelItemTopBottomMargin}"
-        VerticalAlignment="Center"
-        Text="{Binding WslDistributionName}"
-      />
-
-      <TextBlock
-        Grid.Row="2"
-        Grid.Column="0"
-        Margin="{StaticResource SettingPanelItemRightTopBottomMargin}"
-        VerticalAlignment="Center"
-        Foreground="{DynamicResource Color05B}"
-        Text="WSL Launch Command"
-      />
-
-      <TextBox
-        Grid.Row="2"
-        Grid.Column="1"
-        Margin="{StaticResource SettingPanelItemTopBottomMargin}"
-        VerticalAlignment="Center"
-        Text="{Binding WslLaunchCommand}"
-      />
-    </Grid>
+    <ContentControl x:Name="CommandSettingsPanelHost" Grid.Row="0" />
 
     <Separator Grid.Row="1" Style="{StaticResource SettingPanelSeparatorStyle}" />
 

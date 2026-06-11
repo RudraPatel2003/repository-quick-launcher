@@ -51,7 +51,14 @@ public class RepositoryFinder
     {
         List<Repository> repositories = new();
 
-        string wslDistributionName = settings.WslDistributionName;
+        CommandSetting? defaultCommand = settings.GetDefaultCommandSetting();
+
+        if (defaultCommand is null)
+        {
+            return repositories;
+        }
+
+        string wslDistributionName = defaultCommand.WslDistributionName;
         string partialWslPath = Constants.WslPrefix + wslDistributionName;
 
         List<string> wslDirectories = settings.WslDirectories;

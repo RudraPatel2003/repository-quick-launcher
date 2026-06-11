@@ -10,21 +10,30 @@ public partial class SettingsView : UserControl
 {
     private readonly PluginInitContext _context;
     private readonly SettingsViewModel _viewModel;
+    private readonly Action _onSaved;
 
-    public SettingsView(PluginInitContext context, SettingsViewModel viewModel)
+    public SettingsView(PluginInitContext context, SettingsViewModel viewModel, Action onSaved)
     {
         _context = context;
         _viewModel = viewModel;
+        _onSaved = onSaved;
 
         DataContext = viewModel;
 
         InitializeComponent();
+
+        CommandSettingsPanelHost.Content = new CommandSettingsView(
+            context,
+            viewModel.CommandSettingsViewModel,
+            onSaved
+        );
     }
 
     private void Save()
     {
         _viewModel.SyncDirectoriesToSettings();
         _context.API.SaveSettingJsonStorage<Settings>();
+        _onSaved();
     }
 
     private void WindowsDirectoriesButtonAddClick(object sender, RoutedEventArgs e)
