@@ -8,7 +8,7 @@ using FuzzyScore.Net;
 
 namespace Flow.Launcher.Plugin.RepositoryQuickLauncher;
 
-public class RepositoryQuickLauncher : IPlugin, ISettingProvider, IReloadable
+public class RepositoryQuickLauncher : IPlugin, ISettingProvider, IReloadable, IContextMenu
 {
     private PluginInitContext? _context;
     private Settings? _settings;
@@ -18,6 +18,12 @@ public class RepositoryQuickLauncher : IPlugin, ISettingProvider, IReloadable
     {
         _context = context;
         _settings = _context.API.LoadSettingJsonStorage<Settings>();
+
+        if (_settings.EnsureDefaultCommandSetting())
+        {
+            _context.API.SaveSettingJsonStorage<Settings>();
+        }
+
         _repositories = RepositoryFinder.FindRepositories(_settings, _context);
     }
 
@@ -33,22 +39,25 @@ public class RepositoryQuickLauncher : IPlugin, ISettingProvider, IReloadable
             return Messages.GetMissingDirectoriesMessage(_context);
         }
 
+        CommandSetting? defaultCommand = _settings.GetDefaultCommandSetting();
+
         if (
-            string.IsNullOrWhiteSpace(_settings.WindowsLaunchCommand)
-            || string.IsNullOrWhiteSpace(_settings.WslLaunchCommand)
+            defaultCommand is null
+            || string.IsNullOrWhiteSpace(defaultCommand.WindowsLaunchCommand)
+            || string.IsNullOrWhiteSpace(defaultCommand.WslLaunchCommand)
         )
         {
             return Messages.GetMissingLaunchCommandsMessage(_context);
         }
 
-        return GetResults(query.Search);
+        return GetResults(query.Search, defaultCommand);
     }
 
     public Control CreateSettingPanel()
     {
         SettingsViewModel settingsViewModel = new(_settings ?? new Settings());
 
-        return new SettingsView(_context!, settingsViewModel);
+        return new SettingsView(_context!, settingsViewModel, ReloadData);
     }
 
     public void ReloadData()
@@ -61,7 +70,36 @@ public class RepositoryQuickLauncher : IPlugin, ISettingProvider, IReloadable
         Init(_context);
     }
 
-    private List<Result> GetResults(string queryString)
+    public List<Result> LoadContextMenus(Result selectedResult)
+    {
+        if (_context is null || _settings is null)
+        {
+            return new List<Result>();
+        }
+
+        if (selectedResult.ContextData is not Repository repository)
+        {
+            return new List<Result>();
+        }
+
+        return _settings
+            .CommandSettings.Select(commandSetting => new Result
+            {
+                Title = $"Open in {commandSetting.Name}",
+                SubTitle = repository.IsWsl
+                    ? $"{commandSetting.WslDistributionName}: {commandSetting.WslLaunchCommand}"
+                    : commandSetting.WindowsLaunchCommand,
+                IcoPath = Constants.IconPath,
+                Action = _ =>
+                {
+                    RepositoryOpener.OpenFolder(repository, _context, commandSetting);
+                    return true;
+                },
+            })
+            .ToList();
+    }
+
+    private List<Result> GetResults(string queryString, CommandSetting defaultCommand)
     {
         queryString = queryString.ToLowerInvariant().Trim();
 
@@ -94,17 +132,23 @@ public class RepositoryQuickLauncher : IPlugin, ISettingProvider, IReloadable
         }
 
         List<Result> results = scoredRepositories
-            .Select(scoredRepository => new Result()
+            .Select(scoredRepository =>
             {
-                Title = scoredRepository.Repository.GetResultTitle(),
-                SubTitle = scoredRepository.Repository.GetResultSubTitle(),
-                Score = scoredRepository.Score,
-                IcoPath = Constants.IconPath,
-                Action = (e) =>
+                Repository repository = scoredRepository.Repository;
+
+                return new Result()
                 {
-                    RepositoryOpener.OpenFolder(scoredRepository.Repository, _context, _settings);
-                    return true;
-                },
+                    Title = repository.GetResultTitle(),
+                    SubTitle = repository.GetResultSubTitle(),
+                    Score = scoredRepository.Score,
+                    IcoPath = Constants.IconPath,
+                    ContextData = repository,
+                    Action = _ =>
+                    {
+                        RepositoryOpener.OpenFolder(repository, _context, defaultCommand);
+                        return true;
+                    },
+                };
             })
             .ToList();
 

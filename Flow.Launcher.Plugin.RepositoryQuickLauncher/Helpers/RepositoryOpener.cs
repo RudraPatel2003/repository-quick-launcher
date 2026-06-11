@@ -9,23 +9,29 @@ public static class RepositoryOpener
     public static void OpenFolder(
         Repository repository,
         PluginInitContext context,
-        Settings settings
+        CommandSetting command
     )
     {
+        if (ExplorerOpener.ShouldOpenInExplorer(repository, command))
+        {
+            ExplorerOpener.OpenFolder(repository, context);
+            return;
+        }
+
         if (repository.IsWsl)
         {
-            OpenWslFolder(repository, context, settings);
+            OpenWslFolder(repository, context, command);
         }
         else
         {
-            OpenWindowsFolder(repository, context, settings);
+            OpenWindowsFolder(repository, context, command);
         }
     }
 
     private static void OpenWslFolder(
         Repository repository,
         PluginInitContext context,
-        Settings settings
+        CommandSetting command
     )
     {
         ProcessStartInfo processStartInfo = new()
@@ -36,11 +42,11 @@ public static class RepositoryOpener
         };
 
         processStartInfo.ArgumentList.Add("--distribution");
-        processStartInfo.ArgumentList.Add(settings.WslDistributionName);
+        processStartInfo.ArgumentList.Add(command.WslDistributionName);
 
-        processStartInfo.ArgumentList.Add(settings.WslLaunchCommand);
+        processStartInfo.ArgumentList.Add(command.WslLaunchCommand);
 
-        processStartInfo.ArgumentList.Add($"'{repository.WslPath}'");
+        processStartInfo.ArgumentList.Add(repository.WslPath);
 
         try
         {
@@ -55,12 +61,12 @@ public static class RepositoryOpener
     private static void OpenWindowsFolder(
         Repository repository,
         PluginInitContext context,
-        Settings settings
+        CommandSetting command
     )
     {
         ProcessStartInfo processStartInfo = new()
         {
-            FileName = settings.WindowsLaunchCommand,
+            FileName = command.WindowsLaunchCommand,
             UseShellExecute = true,
             WindowStyle = ProcessWindowStyle.Hidden,
         };
